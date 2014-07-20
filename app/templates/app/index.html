@@ -1,0 +1,151 @@
+{% load staticfiles %}
+<html>
+	<head>
+		<style type="text/css">
+			body {
+				background-image: url('http://tarpeggios.com/2014/Sky.jpg');
+				background-attachment: fixed;
+				background-size: cover;
+				font-family: Trebuchet MS;
+				background-size: 100%;
+				padding: 0px;
+				margin: 0px;
+				color: white;
+			}
+			#gradient {
+				background: black;
+				width: 100%;
+				color: white;
+				height: 50px;
+				  background: -moz-linear-gradient(bottom, #000000 0%, transparent 100%);
+				  background: -webkit-linear-gradient(bottom, #000000 5%,transparent 95%);
+				  background: -o-linear-gradient(bottom, #FFFFFF 0%,transparent 100%);
+				  background: -ms-linear-gradient(bottom, #FFFFFF 0%,transparent 100%);
+				  background: linear-gradient(bottom, #FFFFFF 0%,transparent 100%);
+			}
+			#wrapper {
+				width: 100%;
+				background: black;
+				color: white;
+				margin:0px;
+				display: table;
+				padding-bottom: 80px;
+
+			}
+			
+			#logo {
+				text-align: center;
+				padding-top: 0px;
+				padding-bottom: 40px;
+				background: -moz-linear-gradient(bottom, #000000 0%, transparent 100%);
+				background: -webkit-linear-gradient(bottom, #000000 15%,transparent 75%);
+				background: -o-linear-gradient(bottom, #FFFFFF 0%,transparent 100%);
+				background: -ms-linear-gradient(bottom, #FFFFFF 0%,transparent 100%);
+				background: linear-gradient(bottom, #FFFFFF 0%,transparent 100%);
+				color: white;
+			}
+			#logo img {
+				width: 40%;
+				margin-bottom: 40px;
+			}
+			#sidebar{
+				width: 200px;
+    			display: table-cell;
+				margin-left: 40px;
+				font-size: 10pt;
+				text-align: justify; 
+				padding-left: 15px;
+			}
+			#main{
+				width: 700px;
+				padding-left: 30px;
+				display: table-cell;
+				padding-right: 15px;
+
+			}
+			#logo ul {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				letter-spacing: 2px;
+			}
+			#logo li{
+			    display: inline;
+			}
+			a:link, a:visited, a:active {
+				color: #FFFFFF;
+				text-decoration: none;
+			}
+			a:hover {
+				color: #2A4C7D;
+			}
+			#main table {
+				width: 700px;
+				background: #101011;
+				border: 3px solid #101D30;
+				padding: 10px;
+			}
+			#main table th{
+				text-align: left;
+				border-bottom: 1px solid white;
+
+			}
+			#cover {
+				background-image: url('http://tarpeggios.com/2014/olympics.jpg');
+				background-size: cover;
+				background-position: center;
+				height: 200px;
+			}
+			#cover2 {
+				background-image: url('http://tarpeggios.com/2014/fairy.jpg');
+				background-size: cover;
+				background-position: center;
+				height: 200px;
+			}
+			#cover3 {
+				background-image: url('http://tarpeggios.com/2014/allthat.jpg');
+				background-size: cover;
+				background-position: center;
+				height: 200px;
+			}
+			#content{
+				width: 1000px;
+				margin: auto;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="logo">
+			<img src="http://tarpeggios.com/2014/Logo.png" >
+			<br />
+			<ul>
+				<li><a href="{% url 'app:index' %}">HOME</a> | </li>
+				<li><a href="{% url 'app:members' %}">MEMBERS</a> | </li>
+				<li><a href="{% url 'app:rep' %}">REPITOIRE</a> | </li>
+				<li><a href="{% url 'app:events' %}">EVENTS</a> | </li>
+				<li><a href="{% url 'app:gallery' %}">GALLERY</a> | </li>
+				<li><a href="{% url 'app:contact' %}">CONTACT</a></li>
+			</ul>
+		</div>
+		<!--<div id="gradient">
+		</div>-->
+		<div id="wrapper">
+			<div id="content">
+				<div id ="sidebar">
+					{% autoescape off %}{{ sidebar }}{% endautoescape %}	
+					<h3>About us</h3>
+					The Tarpeggios a co-ed a capella group at the University of North Carolina at Chapel Hill, founded in the Fall of 2010 by Joshua Brown, James Kuo and Shawn Kuruganti.  The Tarpeggios are all about making music and having fun.  In the Fall of 2013, the Tarpeggios released their first album, Carolina State of Mind, which can be found on iTunes.
+					<h3>Follow Us</h3>
+					<img height=30px src="http://www.marshallchessclub.org/_/rsrc/1341198240729/config/twitter_bird_logo.png" />
+					<img height=30px src="http://img2.wikia.nocookie.net/__cb20130618064032/twilightsaga/images/1/18/Facebook_icon_small.gif" />
+					<img height=30px src="http://www.vhnsnc.edu.in/images/youtube_icon.png" />
+
+				</div>
+				<div id="main">
+					{% autoescape off %}{{ text }}{% endautoescape %}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
