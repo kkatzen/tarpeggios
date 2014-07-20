@@ -1,6 +1,7 @@
 {% load staticfiles %}
 <html>
 	<head>
+		<title>UNC Tarpeggios A Cappella</title>
 		<style type="text/css">
 			body {
 				background-image: url('http://tarpeggios.com/2014/Sky.jpg');
@@ -122,7 +123,7 @@
 			<ul>
 				<li><a href="{% url 'app:index' %}">HOME</a> | </li>
 				<li><a href="{% url 'app:members' %}">MEMBERS</a> | </li>
-				<li><a href="{% url 'app:rep' %}">REPITOIRE</a> | </li>
+				<li><a href="{% url 'app:rep' %}">REPERTOIRE</a> | </li>
 				<li><a href="{% url 'app:events' %}">EVENTS</a> | </li>
 				<li><a href="{% url 'app:gallery' %}">GALLERY</a> | </li>
 				<li><a href="{% url 'app:contact' %}">CONTACT</a></li>
@@ -134,12 +135,6 @@
 			<div id="content">
 				<div id ="sidebar">
 					{% autoescape off %}{{ sidebar }}{% endautoescape %}	
-					<h3>About us</h3>
-					The Tarpeggios a co-ed a capella group at the University of North Carolina at Chapel Hill, founded in the Fall of 2010 by Joshua Brown, James Kuo and Shawn Kuruganti.  The Tarpeggios are all about making music and having fun.  In the Fall of 2013, the Tarpeggios released their first album, Carolina State of Mind, which can be found on iTunes.
-					<h3>Follow Us</h3>
-					<img height=30px src="http://www.marshallchessclub.org/_/rsrc/1341198240729/config/twitter_bird_logo.png" />
-					<img height=30px src="http://img2.wikia.nocookie.net/__cb20130618064032/twilightsaga/images/1/18/Facebook_icon_small.gif" />
-					<img height=30px src="http://www.vhnsnc.edu.in/images/youtube_icon.png" />
 
 				</div>
 				<div id="main">

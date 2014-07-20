@@ -3,10 +3,11 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from app.models import *
 from django.shortcuts import render_to_response
+from django.shortcuts import get_object_or_404
 
 
 def rep(Request):
-	semesters = Semester.objects.all()
+	semesters = Semester.objects.all().order_by('-date')
 	addme = ""
 	for semester in semesters:
 		addon = """
@@ -23,243 +24,102 @@ def rep(Request):
 			</tr>
 		""" % semester.name
 		addme = "%s%s" % (addme, addon)
-		songs = Song.objects.all()
-		for song in songs:
+		reps = Rep.objects.filter(semester=semester)
+		for rep in reps:
+			name = rep.song.name
+			artist = rep.song.artist
+			arrangers = rep.arranger.all()
+			arrangers_string = ""
+			for arranger in arrangers:
+				arrangers_string = "%s %s" % (arranger.name,arrangers_string)
+			if(rep.soloist_text == ""):
+				soloists = rep.soloist.all()
+				soloist_string = ""
+				for soloist in soloists:
+					soloist_string = "%s %s" % (soloist.name,soloist_string)
+			else:
+				soloist_string = rep.soloist_text
+
 			addon = """
 			<tr>
 			<td>%s</th>
 			<td>%s</th>
 			<td>%s</th>
 			<td>%s</th>
-			</tr>""" % (song.name,song.artist,song.soloist,song.arranger)
+			</tr>""" % (name,soloist_string,artist,arrangers_string)
 			addme = "%s%s" % (addme, addon)
 
-		
-	derp = """
-	<h2>Spring 2014</h2>
-	<div id ="cover">
-	
-	</div>
-	<table>
-		<tr class="tablehead">
-			<th>Song</th>
-			<th>Solosit</th>
-			<th>Artist</th>
-			<th>Arranger</th>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
+		addme = "%s</table>" % addme
 
 
-	</table>
-<h2>Spring 2013</h2>
-<div id ="cover2">
+	sidebar_string = "";
+	sidebars = Sidebar.objects.all();
 
-</div>
-	<table>
-		<tr class="tablehead">
-			<th>Song</th>
-			<th>Solosit</th>
-			<th>Artist</th>
-			<th>Arranger</th>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
+	for sidebar in sidebars:
+		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
 
-
-	</table>
-	<h2>Spring 2013</h2>
-<div id ="cover3">
-
-</div>
-	<table>
-		<tr class="tablehead">
-			<th>Song</th>
-			<th>Solosit</th>
-			<th>Artist</th>
-			<th>Arranger</th>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-		<tr>
-			<td>Back to Black</th>
-			<td>Amy Winehouse</th>
-			<td>Lauren</th>
-			<td>Eddie</th>
-		</tr>
-		<tr>
-			<td>Can't Help Falling Love</td>
-			<td>Ingrid Michaelson</td>
-			<td>Mary Hannah</td>
-			<td>Blake and Dyson</td>
-		</tr>
-
-
-	</table>"""
-	derp = "%s%s" % (addme, derp)
-
-	return render_to_response('app/index.html', {'text': derp})
+	return render_to_response('app/index.html', {'text': addme,'sidebar':sidebar_string})
 
 
 def contact(Request):
-	tests = Semester.objects.all()
-	derp = """
-		test contact
-		"""
-	return render_to_response('app/index.html', {'text': derp})
+	page = get_object_or_404(Page, name="contact")
+	
+	sidebar_string = "";
+	sidebars = Sidebar.objects.all();
+
+	for sidebar in sidebars:
+		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
+
+	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string})
 
 def members(Request):
-	tests = Semester.objects.all()
-	derp = """
-		test members
-		"""
-	return render_to_response('app/index.html', {'text': derp})
+	singers = Singer.objects.all();
+
+	text = ""
+
+	for singer in singers:
+		grad = singer.graduation_semester.name;
+		singer_info = "%s, %s<br />%s" % (singer.name,grad,singer.voice_part)
+		text = "%s<br /><br />%s" % (text,singer_info)
+
+	sidebar_string = "";
+	sidebars = Sidebar.objects.all();
+
+	for sidebar in sidebars:
+		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
+
+	return render_to_response('app/index.html', {'text': text,'sidebar':sidebar_string})
 
 def index(Request):
-	tests = Semester.objects.all()
-	derp = """
-		test rep
-		"""
-	return render_to_response('app/index.html', {'text': derp})
+	page = get_object_or_404(Page, name="home")
+	
+	sidebar_string = "";
+	sidebars = Sidebar.objects.all();
+
+	for sidebar in sidebars:
+		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
+
+	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string})
 
 def gallery(Request):
-	tests = Semester.objects.all()
-	derp = """
-		test gallery
-		"""
-	return render_to_response('app/index.html', {'text': derp})
+	page = get_object_or_404(Page, name="gallery")
+	
+	sidebar_string = "";
+	sidebars = Sidebar.objects.all();
+
+	for sidebar in sidebars:
+		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
+
+	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string})
 
 def events(Request):
-	tests = Semester.objects.all()
-	derp = """
-		test events
-		"""
-	return render_to_response('app/index.html', {'text': derp})
+	page = get_object_or_404(Page, name="events")
+	
+	sidebar_string = "";
+	sidebars = Sidebar.objects.all();
 
+	for sidebar in sidebars:
+		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
+
+	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string})
 
