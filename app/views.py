@@ -34,12 +34,12 @@ def rep(Request):
 			arrangers = rep.arranger.all()
 			arrangers_string = ""
 			for arranger in arrangers:
-				arrangers_string = "%s %s" % (arranger.name,arrangers_string)
+				arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
 			if(rep.soloist_text == ""):
 				soloists = rep.soloist.all()
 				soloist_string = ""
 				for soloist in soloists:
-					soloist_string = "%s %s" % (soloist.name,soloist_string)
+					soloist_string = "<a href='singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
 			else:
 				soloist_string = rep.soloist_text
 
