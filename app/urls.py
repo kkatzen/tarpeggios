@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^gallery$', views.gallery, name='gallery'),
     url(r'^contact$', views.contact, name='contact'),
     url(r'^singer/(?P<id>\d+)$', views.singer, name='singer'),
+    url(r'^semester/(?P<id>\d+)$', views.semester, name='semester'),
 
 ]
 

@@ -12,20 +12,21 @@ def rep(Request):
 	today = datetime.now().date()
 	semesters = Semester.objects.all().order_by('-date').filter(date__lte=today)
 	addme = ""
+
 	for semester in semesters:
 		addon = """
-			<h2>%s</h2>
+			<h2><a href="semester/%s">%s</a></h2>
 			<div id ="cover">
 	
 			</div>
-			<table>
+			<table class="rep">
 			<tr class="tablehead">
 				<th>Song</th>
 				<th>Solosit</th>
 				<th>Artist</th>
 				<th>Arranger</th>
 			</tr>
-		""" % semester.name
+		""" % (semester.id,semester.name)
 		addme = "%s%s" % (addme, addon)
 		reps = Rep.objects.filter(semester=semester)
 		for rep in reps:
@@ -63,6 +64,83 @@ def rep(Request):
 
 	return render_to_response('app/index.html', {'text': addme,'sidebar':sidebar_string})
 
+
+def semester(Request,id):
+	today = datetime.now().date()
+	semester = get_object_or_404(Semester, id=id)
+
+	addme = ""
+	memberships = Membership.objects.filter(semester=semester);
+	singers = []
+	for membership in memberships:
+		singers.append([membership.singer,membership.officer]);
+
+	text = "<h1>Members</h1>"
+
+	for item in singers:
+		singer = item[0]
+		if item[1] is None:
+			officer = ""
+		else:
+			officer = item[1]
+		
+		grad = singer.graduation_semester.name;
+		image_url  = static('images/hallie.png');
+		singer_info = "%s<br />%s<br />%s<br />%s" % (singer.name,grad,singer.voice_part,officer)
+		text = "%s<div id ='member'><a href='../singer/%s'><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
+
+
+	addon = """
+		<h2>%s</h2>
+		<div id ="cover">
+
+		</div>
+		<table class="rep">
+		<tr class="tablehead">
+			<th>Song</th>
+			<th>Solosit(s)</th>
+			<th>Artist</th>
+			<th>Arranger(s)</th>
+		</tr>
+	""" % semester.name
+	addme = "%s%s" % (addme, addon)
+	reps = Rep.objects.filter(semester=semester)
+	for rep in reps:
+		name = rep.song.name
+		artist = rep.song.artist
+		arrangers = rep.arranger.all()
+		arrangers_string = ""
+		for arranger in arrangers:
+			arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
+		if(rep.soloist_text == ""):
+			soloists = rep.soloist.all()
+			soloist_string = ""
+			for soloist in soloists:
+				soloist_string = "<a href='singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
+		else:
+			soloist_string = rep.soloist_text
+
+		addon = """
+		<tr>
+		<td>%s</th>
+		<td>%s</th>
+		<td>%s</th>
+		<td>%s</th>
+		</tr>""" % (name,soloist_string,artist,arrangers_string)
+		addme = "%s%s" % (addme, addon)
+
+	addme = "%s</table>" % addme
+
+
+	addme = "%s%s" % (addme,text)
+
+	sidebar_string = "";
+	sidebars = Sidebar.objects.all();
+
+	for sidebar in sidebars:
+		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
+
+	return render_to_response('app/index.html', {'text': addme,'sidebar':sidebar_string})
 
 def contact(Request):
 	page = get_object_or_404(Page, name="contact")
