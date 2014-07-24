@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from app.models import *
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
+from django.templatetags.static import static
 
 
 def rep(Request):
@@ -75,12 +76,13 @@ def contact(Request):
 def members(Request):
 	singers = Singer.objects.all();
 
-	text = ""
+	text = "";
 
 	for singer in singers:
 		grad = singer.graduation_semester.name;
+		image_url  = static('images/hallie.png');
 		singer_info = "%s, %s<br />%s" % (singer.name,grad,singer.voice_part)
-		text = "%s<br /><br />%s" % (text,singer_info)
+		text = "%s<div id ='member'><a href=''><img width=110px; height=160px; src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,image_url,singer_info)
 
 	sidebar_string = "";
 	sidebars = Sidebar.objects.all();
