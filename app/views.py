@@ -96,7 +96,7 @@ def members(Request):
 		grad = singer.graduation_semester.name;
 		image_url  = static('images/hallie.png');
 		singer_info = "%s<br />%s<br />%s<br />%s" % (singer.name,grad,singer.voice_part,officer)
-		text = "%s<div id ='member'><a href=''><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,image_url,singer_info)
+		text = "%s<div id ='member'><a href='singer/%s'><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
 	sidebar_string = "";
 	sidebars = Sidebar.objects.all();
@@ -105,6 +105,31 @@ def members(Request):
 		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
 
 	return render_to_response('app/index.html', {'text': text,'sidebar':sidebar_string})
+
+def singer(Request,id):
+	singer = get_object_or_404(Singer, id=id)
+	singer_string = """
+	<h3>%s</h3><h4>%s, %s</h4>
+	<p>%s</p>
+	""" % (singer.name,singer.voice_part,singer.graduation_semester.name,singer.blurb)
+
+	memberships = Membership.objects.filter(singer=singer);
+	info = "";
+	for membership in memberships:
+		info = "%s<h3>%s</h3>" % (info,membership.semester.name)
+		if membership.officer is not None:
+			info = "%s<br />%s" % (info,membership.officer.name)
+
+	singer_string = "%s%s" % (singer_string,info)
+
+	sidebar_string = "";
+	sidebars = Sidebar.objects.all()
+
+	for sidebar in sidebars:
+		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
+
+	return render_to_response('app/index.html', {'text': singer_string,'sidebar':sidebar_string})
+
 
 def index(Request):
 	page = get_object_or_404(Page, name="home")

@@ -18,7 +18,7 @@ class Sidebar(models.Model):
 
 class Semester(models.Model):
 	name = models.CharField(max_length=50)
-	date = models.DateTimeField()
+	date = models.DateField(help_text="date which this semester becomes the current semester")
 	concert = models.CharField(max_length=100,null=True,blank=True)
 	members = models.ManyToManyField('Singer', through='Membership')
 

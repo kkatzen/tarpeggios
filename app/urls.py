@@ -9,5 +9,7 @@ urlpatterns = [
     url(r'^events$', views.events, name='events'),
     url(r'^gallery$', views.gallery, name='gallery'),
     url(r'^contact$', views.contact, name='contact'),
+    url(r'^singer/(?P<id>\d+)$', views.singer, name='singer'),
+
 ]
 
