@@ -20,6 +20,13 @@ class Semester(models.Model):
 	name = models.CharField(max_length=50)
 	date = models.DateTimeField()
 	concert = models.CharField(max_length=100,null=True,blank=True)
+	members = models.ManyToManyField('Singer', through='Membership')
+
+	def __unicode__(self):
+		return self.name
+
+class Officer(models.Model):
+	name = models.CharField(max_length=50)
 
 	def __unicode__(self):
 		return self.name
@@ -38,13 +45,20 @@ class Singer(models.Model):
 	graduation_semester = models.ForeignKey(Semester,related_name="graduation_semester")
 	school_email = models.EmailField(null=True,blank=True)
 	alumni_email = models.EmailField(null=True,blank=True)
-	active_semesters = models.ManyToManyField(Semester)
 
 	senior_solo = models.ForeignKey(Song,null=True, blank=True, default = None)
 	
 	def __unicode__(self):
 		return self.name
-	
+
+class Membership(models.Model):
+	singer = models.ForeignKey(Singer)
+	semester = models.ForeignKey(Semester)
+	officer = models.ForeignKey(Officer,null=True, blank=True)
+
+	def __unicode__(self):
+		return "%s in %s" % (self.singer, self.semester)
+
 class Rep(models.Model):
 	semester = models.ForeignKey(Semester)
 	song = models.ForeignKey(Song)

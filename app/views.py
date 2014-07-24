@@ -5,10 +5,12 @@ from app.models import *
 from django.shortcuts import render_to_response
 from django.shortcuts import get_object_or_404
 from django.templatetags.static import static
+from datetime import datetime, timedelta, time
 
 
 def rep(Request):
-	semesters = Semester.objects.all().order_by('-date')
+	today = datetime.now().date()
+	semesters = Semester.objects.all().order_by('-date').filter(date__lte=today)
 	addme = ""
 	for semester in semesters:
 		addon = """
@@ -74,15 +76,27 @@ def contact(Request):
 	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string})
 
 def members(Request):
-	singers = Singer.objects.all();
+	today = datetime.now().date()
+	semester = Semester.objects.all().order_by('-date').filter(date__lte=today)[:1]
 
-	text = "";
+	memberships = Membership.objects.filter(semester=semester[0]);
+	singers = []
+	for membership in memberships:
+		singers.append([membership.singer,membership.officer]);
 
-	for singer in singers:
+	text = "<h1>%s</h1>" % semester[0].name;
+
+	for item in singers:
+		singer = item[0]
+		if item[1] is None:
+			officer = ""
+		else:
+			officer = item[1]
+		
 		grad = singer.graduation_semester.name;
 		image_url  = static('images/hallie.png');
-		singer_info = "%s, %s<br />%s" % (singer.name,grad,singer.voice_part)
-		text = "%s<div id ='member'><a href=''><img width=110px; height=160px; src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,image_url,singer_info)
+		singer_info = "%s<br />%s<br />%s<br />%s" % (singer.name,grad,singer.voice_part,officer)
+		text = "%s<div id ='member'><a href=''><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,image_url,singer_info)
 
 	sidebar_string = "";
 	sidebars = Sidebar.objects.all();
