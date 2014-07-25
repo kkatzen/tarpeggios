@@ -28,6 +28,7 @@ class Semester(models.Model):
 	date = models.DateField(help_text="date which this semester becomes the current semester")
 	concert = models.CharField(max_length=100,null=True,blank=True)
 	members = models.ManyToManyField('Singer', through='Membership')
+	picture = models.ForeignKey(Document,null=True, blank=True, default = None)
 
 	def __unicode__(self):
 		return self.name

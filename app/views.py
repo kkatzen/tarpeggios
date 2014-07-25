@@ -14,11 +14,13 @@ def rep(Request):
 	addme = ""
 
 	for semester in semesters:
+		if semester.picture is None:
+			image = ""
+		else:
+			image = "<img src='/media/%s' width=700px>" % semester.picture.docfile
 		addon = """
 			<h2><a href="semester/%s">%s</a></h2>
-			<div id ="cover">
-	
-			</div>
+			%s
 			<table class="rep">
 			<tr class="tablehead">
 				<th>Song</th>
@@ -26,7 +28,7 @@ def rep(Request):
 				<th>Artist</th>
 				<th>Arranger</th>
 			</tr>
-		""" % (semester.id,semester.name)
+		""" % (semester.id,semester.name,image)
 		addme = "%s%s" % (addme, addon)
 		reps = Rep.objects.filter(semester=semester)
 		for rep in reps:
@@ -89,12 +91,14 @@ def semester(Request,id):
 		singer_info = "%s<br />%s<br />%s<br />%s" % (singer.name,grad,singer.voice_part,officer)
 		text = "%s<div id ='member'><a href='../singer/%s'><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
+	if semester.picture is None:
+		image = ""
+	else:
+		image = "<img src='/media/%s' width=700px>" % semester.picture.docfile
 
 	addon = """
 		<h2>%s</h2>
-		<div id ="cover">
-
-		</div>
+		%s
 		<table class="rep">
 		<tr class="tablehead">
 			<th>Song</th>
@@ -102,7 +106,7 @@ def semester(Request,id):
 			<th>Artist</th>
 			<th>Arranger(s)</th>
 		</tr>
-	""" % semester.name
+	""" % (semester.name,image)
 	addme = "%s%s" % (addme, addon)
 	reps = Rep.objects.filter(semester=semester)
 	for rep in reps:
@@ -172,7 +176,10 @@ def members(Request):
 			officer = item[1]
 		
 		grad = singer.graduation_semester.name;
-		image_url  = static('images/hallie.png');
+		if singer.picture is None:
+			image_url  = static('images/default_person.png');
+		else:
+			image_url  = "/media/%s" % singer.picture.docfile
 		singer_info = "%s<br />%s<br />%s<br />%s" % (singer.name,grad,singer.voice_part,officer)
 		text = "%s<div id ='member'><a href='singer/%s'><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
