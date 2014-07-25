@@ -34,10 +34,15 @@ def rep(Request):
 		for rep in reps:
 			name = rep.song.name
 			artist = rep.song.artist
-			arrangers = rep.arranger.all()
-			arrangers_string = ""
-			for arranger in arrangers:
-				arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
+
+			if(rep.arranger_text == ""):
+				arrangers = rep.arranger.all()
+				arrangers_string = ""
+				for arranger in arrangers:
+					arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
+			else:
+				arrangers_string = rep.arranger_text
+
 			if(rep.soloist_text == ""):
 				soloists = rep.soloist.all()
 				soloist_string = ""
@@ -46,13 +51,18 @@ def rep(Request):
 			else:
 				soloist_string = rep.soloist_text
 
+			if rep.link == "":
+				title = name;
+			else:
+				title = "<a href='%s'>%s</a>" % (rep.link,name)
+
 			addon = """
 			<tr>
 			<td>%s</th>
 			<td>%s</th>
 			<td>%s</th>
 			<td>%s</th>
-			</tr>""" % (name,soloist_string,artist,arrangers_string)
+			</tr>""" % (title,soloist_string,artist,arrangers_string)
 			addme = "%s%s" % (addme, addon)
 
 		addme = "%s</table>" % addme
@@ -115,17 +125,27 @@ def semester(Request,id):
 	for rep in reps:
 		name = rep.song.name
 		artist = rep.song.artist
-		arrangers = rep.arranger.all()
-		arrangers_string = ""
-		for arranger in arrangers:
-			arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
+
+		if(rep.arranger_text == ""):
+			arrangers = rep.arranger.all()
+			arrangers_string = ""
+			for arranger in arrangers:
+				arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
+		else:
+			arrangers_string = rep.arranger_text
+
+		soloist_string = ""
 		if(rep.soloist_text == ""):
 			soloists = rep.soloist.all()
-			soloist_string = ""
 			for soloist in soloists:
 				soloist_string = "<a href='singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
 		else:
 			soloist_string = rep.soloist_text
+
+		if rep.link == "":
+			title = name;
+		else:
+			title = "<a href='%s'>%s</a>" % (rep.link,name)
 
 		addon = """
 		<tr>
@@ -133,7 +153,7 @@ def semester(Request,id):
 		<td>%s</th>
 		<td>%s</th>
 		<td>%s</th>
-		</tr>""" % (name,soloist_string,artist,arrangers_string)
+		</tr>""" % (title,soloist_string,artist,arrangers_string)
 		addme = "%s%s" % (addme, addon)
 
 	addme = "%s</table>" % addme
