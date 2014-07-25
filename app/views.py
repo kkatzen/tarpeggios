@@ -130,7 +130,7 @@ def semester(Request,id):
 			arrangers = rep.arranger.all()
 			arrangers_string = ""
 			for arranger in arrangers:
-				arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
+				arrangers_string = "<a href='../singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
 		else:
 			arrangers_string = rep.arranger_text
 
@@ -138,7 +138,7 @@ def semester(Request,id):
 		if(rep.soloist_text == ""):
 			soloists = rep.soloist.all()
 			for soloist in soloists:
-				soloist_string = "<a href='singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
+				soloist_string = "<a href='../singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
 		else:
 			soloist_string = rep.soloist_text
 
