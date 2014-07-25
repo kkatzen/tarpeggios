@@ -87,7 +87,10 @@ def semester(Request,id):
 			officer = item[1]
 		
 		grad = singer.graduation_semester.name;
-		image_url  = static('images/hallie.png');
+		if singer.picture is None:
+			image_url  = static('images/default_person.png');
+		else:
+			image_url  = "/media/%s" % singer.picture.docfile
 		singer_info = "%s<br />%s<br />%s<br />%s" % (singer.name,grad,singer.voice_part,officer)
 		text = "%s<div id ='member'><a href='../singer/%s'><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
