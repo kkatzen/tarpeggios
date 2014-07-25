@@ -15,20 +15,27 @@ class SingerInline(admin.StackedInline):
     fields = ('name',)
 """
 
+
+class SingerAdmin(admin.ModelAdmin):
+    list_filter = ('graduation_semester','voice_part')
+
+class RepAdmin(admin.ModelAdmin):
+    list_filter = ('semester',)
+
 class SemesterAdmin(admin.ModelAdmin):
     inlines = [
-        RepInline,MemberInline
+        MemberInline,RepInline
        #	SingerInline
     ]
 
 
 admin.site.register(Semester, SemesterAdmin)
+admin.site.register(Singer, SingerAdmin)
+admin.site.register(Rep, RepAdmin)
 
 
-admin.site.register(Singer)
 admin.site.register(Officer)
 admin.site.register(Sidebar)
 admin.site.register(Page)
 admin.site.register(Song)
-admin.site.register(Rep)
 admin.site.register(Document)

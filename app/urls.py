@@ -5,6 +5,7 @@ from app import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^members$', views.members, name='members'),
+    url(r'^alumni$', views.alumni, name='alumni'),
     url(r'^rep$', views.rep, name='rep'),
     url(r'^events$', views.events, name='events'),
     url(r'^gallery$', views.gallery, name='gallery'),
