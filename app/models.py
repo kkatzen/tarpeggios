@@ -2,6 +2,13 @@ from django.db import models
 import datetime
 #from tinymce import models as tinymce_models
 
+class Document(models.Model):
+	docfile = models.FileField(upload_to='%Y/%m/%d')
+	name = models.CharField(max_length=20)
+
+	def __unicode__(self):
+		return self.name
+
 class Page(models.Model):
 	name = models.CharField(max_length=30)
 	content = models.TextField()
@@ -47,6 +54,7 @@ class Singer(models.Model):
 	alumni_email = models.EmailField(null=True,blank=True)
 
 	senior_solo = models.ForeignKey(Song,null=True, blank=True, default = None)
+	picture = models.ForeignKey(Document,null=True, blank=True, default = None)
 	
 	def __unicode__(self):
 		return self.name

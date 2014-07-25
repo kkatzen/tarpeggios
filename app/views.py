@@ -162,7 +162,7 @@ def members(Request):
 	for membership in memberships:
 		singers.append([membership.singer,membership.officer]);
 
-	text = "<h1>%s</h1>" % semester[0].name;
+	text = ""
 
 	for item in singers:
 		singer = item[0]
