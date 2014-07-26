@@ -164,7 +164,7 @@ def semester(Request,id):
 	events = Event.objects.filter(semester=semester).order_by('date');
 
 	#events count 0
-	text = ""
+	text = "<div style='clear:both;'>"
 	for event in events:
 		if event.link == "":
 			title = event.title;
@@ -173,7 +173,7 @@ def semester(Request,id):
 
 		text = "%s<h2>%s</h2>%s %s<br />%s" % (text,title,event.date,event.location,event.blurb)
 
-	addme = "%s%s" % (addme,text)
+	addme = "%s%s</div>" % (addme,text)
 
 
 	sidebar_string = "";
