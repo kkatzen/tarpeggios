@@ -87,7 +87,7 @@ def semester(Request,id):
 	for membership in memberships:
 		singers.append([membership.singer,membership.officer]);
 
-	text = "<h1>Members</h1>"
+	text = "<br />"
 
 	for item in singers:
 		singer = item[0]
@@ -160,6 +160,21 @@ def semester(Request,id):
 
 
 	addme = "%s%s" % (addme,text)
+
+	events = Event.objects.filter(semester=semester).order_by('date');
+
+	#events count 0
+	text = ""
+	for event in events:
+		if event.link == "":
+			title = event.title;
+		else:
+			title = "<a href='%s'>%s</a>" % (event.link,event.title)
+
+		text = "%s<h2>%s</h2>%s %s<br />%s" % (text,title,event.date,event.location,event.blurb)
+
+	addme = "%s%s" % (addme,text)
+
 
 	sidebar_string = "";
 	sidebars = Sidebar.objects.all();
@@ -267,7 +282,7 @@ def singer(Request,id):
 	<p>%s%s</p>
 	""" % (singer.name,singer.voice_part,singer.graduation_semester.name,image_url,singer.blurb)
 
-	memberships = Membership.objects.filter(singer=singer);
+	memberships = Membership.objects.filter(singer=singer).order_by('-semester__date');
 	info = "<p style='padding-top:15px;clear:both;'><b>Active Semesters:</b><ul>";
 	for membership in memberships:
 		officer = ""
@@ -311,13 +326,25 @@ def gallery(Request):
 	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string})
 
 def events(Request):
-	page = get_object_or_404(Page, name="events")
-	
+	today = datetime.now().date()
+	semester = Semester.objects.all().order_by('-date').filter(date__lte=today)[:1]
+
+	events = Event.objects.filter(semester=semester[0]).order_by('date');
+
+	#events count 0
+	text = ""
+	for event in events:
+		if event.link == "":
+			title = event.title;
+		else:
+			title = "<a href='%s'>%s</a>" % (event.link,event.title)
+
+		text = "%s<h2>%s</h2>%s %s<br />%s" % (text,title,event.date,event.location,event.blurb)
+
 	sidebar_string = "";
 	sidebars = Sidebar.objects.all();
 
 	for sidebar in sidebars:
 		sidebar_string = "%s<h3>%s</h3>%s" % (sidebar_string,sidebar.name,sidebar.content)
 
-	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string})
-
+	return render_to_response('app/index.html', {'text': text,'sidebar':sidebar_string})

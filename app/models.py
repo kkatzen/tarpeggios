@@ -80,3 +80,14 @@ class Rep(models.Model):
 
 	def __unicode__(self):
 		return "%s in %s" % (self.song,self.semester)
+
+class Event(models.Model):
+	semester = models.ForeignKey(Semester)
+	title = models.CharField(max_length=100,null=True, blank=True)
+	date = models.DateField(help_text="")
+	location = models.CharField(max_length=100)
+	blurb = models.TextField()
+	link = models.CharField(max_length=200,null=True, blank=True)
+
+	def __unicode__(self):
+		return "%s in %s" % (self.title,self.semester.name)

@@ -33,6 +33,7 @@ admin.site.register(Semester, SemesterAdmin)
 admin.site.register(Singer, SingerAdmin)
 admin.site.register(Rep, RepAdmin)
 
+admin.site.register(Event)
 
 admin.site.register(Officer)
 admin.site.register(Sidebar)
