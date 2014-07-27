@@ -72,9 +72,7 @@ class Rep(models.Model):
 	semester = models.ForeignKey(Semester)
 	song = models.ForeignKey(Song)
 	soloist = models.ManyToManyField(Singer,related_name="soloist",null=True, blank=True)
-	arranger = models.ManyToManyField(Singer,related_name="arranger",null=True, blank=True)
 	soloist_text = models.CharField(max_length=100,null=True, blank=True,help_text="this will override other solosit options as the display")
-	arranger_text = models.CharField(max_length=100,null=True, blank=True,help_text="this will override other arranger options as the display")
 
 	link = models.CharField(max_length=200,null=True, blank=True)
 

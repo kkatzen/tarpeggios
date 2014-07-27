@@ -19,7 +19,7 @@ def rep(Request):
 		else:
 			image = "<img src='/media/%s' width=700px>" % semester.picture.docfile
 		addon = """
-			<h2><a href="semester/%s">%s</a></h2>
+			<h3><a href="semester/%s">%s</a></h3>
 			%s
 			<table class="rep">
 			<tr class="tablehead">
@@ -35,13 +35,13 @@ def rep(Request):
 			name = rep.song.name
 			artist = rep.song.artist
 
-			if(rep.arranger_text == ""):
-				arrangers = rep.arranger.all()
+			if(rep.song.arranger_text == ""):
+				arrangers = rep.song.arranger.all()
 				arrangers_string = ""
 				for arranger in arrangers:
 					arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
 			else:
-				arrangers_string = rep.arranger_text
+				arrangers_string = rep.song.arranger_text
 
 			if(rep.soloist_text == ""):
 				soloists = rep.soloist.all()
@@ -102,7 +102,7 @@ def semester(Request,id):
 		else:
 			image_url  = "/media/%s" % singer.picture.docfile
 		singer_info = "%s<br />%s<br />%s<br />%s" % (singer.name,grad,singer.voice_part,officer)
-		text = "%s<div id ='member'><a href='../singer/%s'><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
+		text = "%s<div id ='member_sem'><a href='../singer/%s'><img height='130px' src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
 	if semester.picture is None:
 		image = ""
@@ -126,13 +126,13 @@ def semester(Request,id):
 		name = rep.song.name
 		artist = rep.song.artist
 
-		if(rep.arranger_text == ""):
-			arrangers = rep.arranger.all()
+		if(rep.song.arranger_text == ""):
+			arrangers = rep.song.arranger.all()
 			arrangers_string = ""
 			for arranger in arrangers:
 				arrangers_string = "<a href='../singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
 		else:
-			arrangers_string = rep.arranger_text
+			arrangers_string = rep.song.arranger_text
 
 		soloist_string = ""
 		if(rep.soloist_text == ""):
@@ -171,7 +171,7 @@ def semester(Request,id):
 		else:
 			title = "<a href='%s'>%s</a>" % (event.link,event.title)
 
-		text = "%s<h2>%s</h2>%s %s<br />%s" % (text,title,event.date,event.location,event.blurb)
+		text = "%s<div id='event'><h4>%s</h4>%s %s<br />%s</div>" % (text,title,event.date,event.location,event.blurb)
 
 	addme = "%s%s</div>" % (addme,text)
 
