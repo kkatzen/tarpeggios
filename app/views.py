@@ -259,7 +259,7 @@ def alumni(Request):
 		else:
 			image_url  = "/media/%s" % singer.picture.docfile
 		singer_info = "%s<br />%s<br />%s<br />" % (singer.name,grad,singer.voice_part)
-		text = "%s<div id ='member'><a href='singer/%s'><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
+		text = "%s<div id ='member_sem'><a href='singer/%s'><img src='%s'><div id='memberinfo_sem'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
 	sidebar_string = "";
 	sidebars = Sidebar.objects.all();
@@ -278,7 +278,7 @@ def singer(Request,id):
 		image_url  = "<img height=200px style='float:left;margin-right:20px;border: 3px solid #101D30;' src='/media/%s'>" % singer.picture.docfile
 
 	singer_string = """
-	%s<h3 style='margin-bottom:2px;'>%s</h3><h4 style='margin:0px;'>%s, %s</h4>
+	%s<h3 style='margin-bottom:6px;'>%s</h3><h4 style='margin:0px;'>%s, %s</h4>
 	<p>%s</p>
 	""" % (image_url,singer.name,singer.voice_part,singer.graduation_semester.name,singer.blurb)
 
