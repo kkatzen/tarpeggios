@@ -170,8 +170,12 @@ def semester(Request,id):
 			title = event.title;
 		else:
 			title = "<a href='%s'>%s</a>" % (event.link,event.title)
+		if event.blurb == "":
+			blurb = "";
+		else:
+			blurb = "<p style='font-size:14px'>%s</p>" % (event.blurb)
 
-		text = "%s<div id='event'><b>%s</b><br /><span style='font-size:12px'>%s, %s</span><p style='font-size:14px'>%s</p></div>" % (text,title,event.date.strftime('%b, %d'),event.location,event.blurb)
+		text = "%s<div id='event'><b>%s</b><br /><span style='font-size:13px'>%s, %s</span>%s</div>" % (text,title,event.date.strftime('%B %d'),event.location,blurb)
 
 	addme = "%s%s</div>" % (addme,text)
 
