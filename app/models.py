@@ -86,7 +86,7 @@ class Event(models.Model):
 	title = models.CharField(max_length=100,null=True, blank=True)
 	date = models.DateField(help_text="")
 	location = models.CharField(max_length=100)
-	blurb = models.TextField()
+	blurb = models.TextField(null=True, blank=True)
 	link = models.CharField(max_length=200,null=True, blank=True)
 
 	def __unicode__(self):
