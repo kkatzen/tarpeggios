@@ -42,13 +42,15 @@ class Officer(models.Model):
 class Song(models.Model):
 	name = models.CharField(max_length=50)
 	artist = models.CharField(max_length=50)
+	arranger = models.ManyToManyField('Singer',related_name="arranger",null=True, blank=True)
+        arranger_text = models.CharField(max_length=100,null=True, blank=True,help_text="this will override other arranger options as the display")
 
 	def __unicode__(self):
 		return self.name
 
 class Singer(models.Model):
 	name = models.CharField(max_length=100)
-	blurb = models.TextField()
+	blurb = tinymce_models.HTMLField()
 	voice_part = models.CharField(max_length=20)
 	graduation_semester = models.ForeignKey(Semester,related_name="graduation_semester")
 	school_email = models.EmailField(null=True,blank=True)
