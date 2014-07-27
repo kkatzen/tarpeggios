@@ -50,7 +50,7 @@ class Song(models.Model):
 
 class Singer(models.Model):
 	name = models.CharField(max_length=100)
-	blurb = tinymce_models.HTMLField()
+	blurb = models.TextField()
 	voice_part = models.CharField(max_length=20)
 	graduation_semester = models.ForeignKey(Semester,related_name="graduation_semester")
 	school_email = models.EmailField(null=True,blank=True)
