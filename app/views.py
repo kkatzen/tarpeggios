@@ -17,7 +17,7 @@ def rep(Request):
 		if semester.picture is None:
 			image = ""
 		else:
-			image = "<img src='/media/%s' width=700px>" % semester.picture.docfile
+			image = "<a href='semester/%s'><img src='/media/%s' width=700px></a>" % (semester.id, semester.picture.docfile)
 		addon = """
 			<h3><a href="semester/%s">%s</a></h3>
 			%s
@@ -38,7 +38,11 @@ def rep(Request):
 			if(rep.song.arranger_text == ""):
 				arrangers = rep.song.arranger.all()
 				arrangers_string = ""
+				arranger_count = 0;
 				for arranger in arrangers:
+					if(arranger_count > 0):
+						arrangers_string = "%s<br />" % arrangers_string
+					arranger_count = arranger_count +1
 					arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
 			else:
 				arrangers_string = rep.song.arranger_text
@@ -46,7 +50,11 @@ def rep(Request):
 			if(rep.soloist_text == ""):
 				soloists = rep.soloist.all()
 				soloist_string = ""
+				singer_count = 0;
 				for soloist in soloists:
+					if(singer_count > 0):
+						soloist_string = "%s<br />" % soloist_string
+					singer_count = singer_count + 1
 					soloist_string = "<a href='singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
 			else:
 				soloist_string = rep.soloist_text
@@ -129,7 +137,11 @@ def semester(Request,id):
 		if(rep.song.arranger_text == ""):
 			arrangers = rep.song.arranger.all()
 			arrangers_string = ""
+			arranger_count = 0
 			for arranger in arrangers:
+				if(arranger_count > 0):
+					arrangers_string = "%s<br />" % arrangers_string
+				arranger_count = arranger_count +1
 				arrangers_string = "<a href='../singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
 		else:
 			arrangers_string = rep.song.arranger_text
@@ -137,7 +149,11 @@ def semester(Request,id):
 		soloist_string = ""
 		if(rep.soloist_text == ""):
 			soloists = rep.soloist.all()
+			soloist_count = 0;
 			for soloist in soloists:
+				if(soloist_count > 0):
+					soloist_string = "%s<br />" % soloist_string
+				soloist_count = soloist_count +1
 				soloist_string = "<a href='../singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
 		else:
 			soloist_string = rep.soloist_text
@@ -173,7 +189,7 @@ def semester(Request,id):
 		if event.blurb == "":
 			blurb = "";
 		else:
-			blurb = "<p style='font-size:14px'>%s</p>" % (event.blurb)
+			blurb = "<p style='font-size:10px'>%s</p>" % (event.blurb)
 
 		text = "%s<div id='event'><b>%s</b><br /><span style='font-size:13px'>%s, %s</span>%s</div>" % (text,title,event.date.strftime('%B %d'),event.location,blurb)
 
@@ -189,15 +205,60 @@ def semester(Request,id):
 	return render_to_response('app/index.html', {'text': addme,'sidebar':sidebar_string})
 
 def contact(Request):
-	page = get_object_or_404(Page, name="contact")
-	
+	today = datetime.now().date()
+	semester = Semester.objects.all().order_by('-date').filter(date__lte=today)[:1]
+
+	president_pos = Officer.objects.all().filter(name="President")[:1]
+	presidents = Membership.objects.all().filter(officer=president_pos,semester=semester[0])
+
+	music_dirs_pos = Officer.objects.all().filter(name="Music Director")[:1]
+	music_dirs = Membership.objects.all().filter(officer=music_dirs_pos,semester=semester[0])
+
+	business_pos = Officer.objects.all().filter(name="Business Manager")[:1]
+	business = Membership.objects.all().filter(officer=business_pos,semester=semester[0])
+
+	social_pos = Officer.objects.all().filter(name="Social Chair")[:1]
+	socials = Membership.objects.all().filter(officer=social_pos,semester=semester[0])
+
+	text = "Looking to contact us?  Here are our current officers of interest.<br /><br />"
+	if(len(presidents) > 0):
+		text = "%s<br/><b>President: </b>" % (text)
+		for president in presidents:
+			if(president.singer.school_email == ""):
+				text = "%s<a href='singer/%s'>%s</a> " % (text,president.singer.id,president.singer.name)
+			else:
+				text = "%s<a href='singer/%s'>%s</a> (%s) " % (text,president.singer.id,president.singer.name,president.singer.school_email)
+
+	if(len(business) > 0):
+		text = "%s<br /><b>Business Manager: </b>" % (text)
+		for business_m in business:
+			if(business_m.singer.school_email == ""):
+				text = "%s<a href='singer/%s'>%s</a> " % (text,business_m.singer.id,business_m.singer.name)
+			else:
+				text = "%s<a href='singer/%s'>%s</a> (%s) " % (text,business_m.singer.id,business_m.singer.name,business_m.singer.school_email)
+
+	if(len(music_dirs) > 0):
+		text = "%s<br /><b>Music Director: </b>" % (text)
+		for music_dir in music_dirs:
+			if(music_dir.singer.school_email == ""):
+				text = "%s<a href='singer/%s'>%s</a> " % (text,music_dir.singer.id,music_dir.singer.name)
+			else:
+				text = "%s<a href='singer/%s'>%s</a> (%s) " % (text,music_dir.singer.id,music_dir.singer.name,music_dir.singer.school_email)
+	if(len(socials) > 0):
+		text = "%s<br /><b>Social Chair: </b>" % (text)
+		for social in socials:
+			if(social.singer.school_email == ""):
+				text = "%s<a href='singer/%s'>%s</a> " % (text,social.singer.id,social.singer.name)
+			else:
+				text = "%s<a href='singer/%s'>%s</a> (%s) " % (text,social.singer.id,social.singer.name,social.singer.school_email)
+
 	sidebar_string = "";
 	sidebars = Sidebar.objects.all();
 
 	for sidebar in sidebars:
 		sidebar_string = "%s<h3>%s</h3><p>%s</p>" % (sidebar_string,sidebar.name,sidebar.content)
 
-	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string})
+	return render_to_response('app/index.html', {'text': text,'sidebar':sidebar_string})
 
 def members(Request):
 	today = datetime.now().date()
@@ -300,7 +361,6 @@ def singer(Request,id):
 		senior_solo  = "<h3>Senior Solo:</h3>%s by %s</p>" % (singer.senior_solo.name,singer.senior_solo.artist)
 
 	sidebar_string = "%s%s"  % (sidebar_string,senior_solo)
-
 
 	return render_to_response('app/index.html', {'text': singer_string,'sidebar':sidebar_string})
 
