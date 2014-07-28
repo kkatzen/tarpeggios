@@ -333,32 +333,29 @@ def alumni(Request):
 def singer(Request,id):
 	singer = get_object_or_404(Singer, id=id)
 
+	singer_string = """
+	<p>%s</p>
+	""" % (singer.blurb)
+
 	if singer.picture is None:
 		image_url  = "";
 	else:
-		image_url  = "<img height=200px style='float:left;margin-right:20px;border: 3px solid #101D30;' src='/media/%s'>" % singer.picture.docfile
-
-	singer_string = """
-	%s<h3 style='margin-bottom:6px;'>%s</h3><h4 style='margin:0px;'>%s, %s</h4>
-	<p>%s</p>
-	""" % (image_url,singer.name,singer.voice_part,singer.graduation_semester.name,singer.blurb)
-
-	sidebar_string = "";
+		image_url  = "<img width=180px style='float:center;border: 3px solid #101D30;' src='/media/%s'>" % singer.picture.docfile
 
 	memberships = Membership.objects.filter(singer=singer).order_by('-semester__date');
-	sidebar_string = "<h3>Active Semesters:</h3>";
+	sidebar_string = "%s<h3 style='margin-bottom:0px;padding-bottom:0px;text-align:center;'>%s</h3><p style='margin-top:4px;font-size:15px;text-align:center;'>%s<br />%s</p><h3 style='margin-bottom:0px;padding-bottom:0px;text-align:center;'>Active Semesters:</h3><p style='text-align:center'>" % (image_url,singer.name,singer.voice_part,singer.graduation_semester.name)
 	for membership in memberships:
 		officer = ""
 		if membership.officer is not None:
 			officer = " (%s)" % (membership.officer.name)
 
 		sidebar_string = "%s<a href='../semester/%s'>%s%s</a><br />" % (sidebar_string,membership.semester.id,membership.semester.name,officer)
-	sidebar_string = "%s<p></p>"  % (sidebar_string)
+	sidebar_string = "%s</p>"  % (sidebar_string)
 
 	if singer.senior_solo is None:
 		senior_solo  = "";
 	else:
-		senior_solo  = "<h3>Senior Solo:</h3>%s by %s</p>" % (singer.senior_solo.name,singer.senior_solo.artist)
+		senior_solo  = "<h3 style='margin-bottom:0px;padding-bottom:0px;text-align:center;'>Senior Solo:</h3><p style='text-align:center'>%s by %s</p>" % (singer.senior_solo.name,singer.senior_solo.artist)
 
 	sidebar_string = "%s%s"  % (sidebar_string,senior_solo)
 
