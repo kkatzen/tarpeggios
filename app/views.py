@@ -378,10 +378,38 @@ def singer(Request,id):
 
 	sidebar_string = "%s%s"  % (sidebar_string,senior_solo)
 
-	singer_string = "%s<h2>Solos</h2>"  % (singer_string)
+
 	reps = Rep.objects.filter(soloist=singer).order_by('-semester__date');
-	for rep in reps:
-		singer_string = "%s%s"  % (singer_string,rep)
+	reps_count = Rep.objects.filter(soloist=singer).order_by('-semester__date').count();
+
+	if reps_count > 0:
+		singer_string = "%s<h3>Solos</h3>"  % (singer_string)
+
+		songs=[]
+		for rep in reps:
+			if rep.song not in songs:
+				songs.append(rep.song)
+
+		count = 0
+		for song in songs:
+			if count > 0:
+				singer_string = "%s, %s"  % (singer_string,song)
+			else:
+				singer_string = "%s%s"  % (singer_string,song)
+			count = count+1
+
+	songs = Song.objects.filter(arranger=singer);
+	songs_count = Song.objects.filter(arranger=singer).count();
+
+	if songs_count > 0:
+		singer_string = "%s<h3>Arrangements</h3>"  % (singer_string)
+		count = 0
+		for song in songs:
+			if count > 0:
+				singer_string = "%s, %s"  % (singer_string,song)
+			else:
+				singer_string = "%s%s"  % (singer_string,song)
+			count = count+1
 
 	return render_to_response('app/index.html', {'text': singer_string,'sidebar':sidebar_string})
 
