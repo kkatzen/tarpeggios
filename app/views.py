@@ -39,7 +39,7 @@ def rep(Request):
 			if(rep.song.arranger_text == ""):
 				arrangers = rep.song.arranger.all()
 				for arranger in arrangers:
-					arrangers_string = "<a href='../singer/%s'>%s</a><br />%s" % (arranger.id,arranger.name,arrangers_string)
+					arrangers_string = "<a href='singer/%s'>%s</a><br />%s" % (arranger.id,arranger.name,arrangers_string)
 			else:
 				arrangers_string = rep.song.arranger_text
 
@@ -47,7 +47,7 @@ def rep(Request):
 			if(rep.soloist_text == ""):
 				soloists = rep.soloist.all()
 				for soloist in soloists:
-					soloist_string = "<a href='../singer/%s'>%s</a><br />%s" % (soloist.id,soloist.name,soloist_string)
+					soloist_string = "<a href='singer/%s'>%s</a><br />%s" % (soloist.id,soloist.name,soloist_string)
 			else:
 				soloist_string = rep.soloist_text
 
@@ -126,7 +126,7 @@ def semester(Request,id):
 	for rep in reps:
 		name = rep.song.name
 		artist = rep.song.artist
-		
+
 		arrangers_string = ""
 		if(rep.song.arranger_text == ""):
 			arrangers = rep.song.arranger.all()
@@ -291,13 +291,8 @@ def members(Request):
 		text = "%s<div id ='member'><a href='singer/%s'><img src='%s'><div id='memberinfo'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
 	text = "%s<p style='clear:both;'><a href='alumni'>View Tarpeggio Alumni</a></p>" % text
-	sidebar_string = "";
-	sidebars = Sidebar.objects.all();
 
-	for sidebar in sidebars:
-		sidebar_string = "%s<h3>%s</h3><p>%s</p>" % (sidebar_string,sidebar.name,sidebar.content)
-
-	return render_to_response('app/index.html', {'text': text,'sidebar':sidebar_string})
+	return render_to_response('app/index.html', {'text': text})
 
 def alumni(Request):
 	#order these peeps by most recent grad semester than by name
@@ -326,13 +321,7 @@ def alumni(Request):
 		singer_info = "%s<br />%s<br />%s<br />" % (singer.name,grad,singer.voice_part)
 		text = "%s<div id ='member_sem'><a href='singer/%s'><img src='%s'><div id='memberinfo_sem'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
-	sidebar_string = "";
-	sidebars = Sidebar.objects.all();
-
-	for sidebar in sidebars:
-		sidebar_string = "%s<h3>%s</h3><p>%s</p>" % (sidebar_string,sidebar.name,sidebar.content)
-
-	return render_to_response('app/index.html', {'text': text,'sidebar':sidebar_string})
+	return render_to_response('app/index.html', {'text': text})
 
 def singer(Request,id):
 	singer = get_object_or_404(Singer, id=id)
@@ -368,7 +357,7 @@ def singer(Request,id):
 	reps_count = Rep.objects.filter(soloist=singer).order_by('-semester__date').count();
 
 	if reps_count > 0:
-		singer_string = "%s<h3>Solos</h3>"  % (singer_string)
+		singer_string = "%s<h4>Solos</h4><p>"  % (singer_string)
 
 		songs=[]
 		for rep in reps:
@@ -383,11 +372,13 @@ def singer(Request,id):
 				singer_string = "%s%s"  % (singer_string,song)
 			count = count+1
 
+		singer_string = "%s</p>"  % (singer_string)
+
 	songs = Song.objects.filter(arranger=singer);
 	songs_count = Song.objects.filter(arranger=singer).count();
 
 	if songs_count > 0:
-		singer_string = "%s<h3>Arrangements</h3>"  % (singer_string)
+		singer_string = "%s<h4>Arrangements</h4><p>"  % (singer_string)
 		count = 0
 		for song in songs:
 			if count > 0:
@@ -395,6 +386,7 @@ def singer(Request,id):
 			else:
 				singer_string = "%s%s"  % (singer_string,song)
 			count = count+1
+		singer_string = "%s</p>"  % (singer_string)
 
 	return render_to_response('app/index.html', {'text': singer_string,'sidebar':sidebar_string})
 
