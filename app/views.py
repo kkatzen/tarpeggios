@@ -35,29 +35,22 @@ def rep(Request):
 			name = rep.song.name
 			artist = rep.song.artist
 
+			arrangers_string = ""
 			if(rep.song.arranger_text == ""):
 				arrangers = rep.song.arranger.all()
-				arrangers_string = ""
-				arranger_count = 0;
 				for arranger in arrangers:
-					if(arranger_count > 0):
-						arrangers_string = "%s<br />" % arrangers_string
-					arranger_count = arranger_count +1
-					arrangers_string = "<a href='singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
+					arrangers_string = "<a href='../singer/%s'>%s</a><br />%s" % (arranger.id,arranger.name,arrangers_string)
 			else:
 				arrangers_string = rep.song.arranger_text
 
+			soloist_string = ""
 			if(rep.soloist_text == ""):
 				soloists = rep.soloist.all()
-				soloist_string = ""
-				singer_count = 0;
 				for soloist in soloists:
-					if(singer_count > 0):
-						soloist_string = "%s<br />" % soloist_string
-					singer_count = singer_count + 1
-					soloist_string = "<a href='singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
+					soloist_string = "<a href='../singer/%s'>%s</a><br />%s" % (soloist.id,soloist.name,soloist_string)
 			else:
 				soloist_string = rep.soloist_text
+
 
 			if rep.link == "":
 				title = name;
@@ -133,28 +126,20 @@ def semester(Request,id):
 	for rep in reps:
 		name = rep.song.name
 		artist = rep.song.artist
-
+		
+		arrangers_string = ""
 		if(rep.song.arranger_text == ""):
 			arrangers = rep.song.arranger.all()
-			arrangers_string = ""
-			arranger_count = 0
 			for arranger in arrangers:
-				if(arranger_count > 0):
-					arrangers_string = "%s<br />" % arrangers_string
-				arranger_count = arranger_count +1
-				arrangers_string = "<a href='../singer/%s'>%s</a> %s" % (arranger.id,arranger.name,arrangers_string)
+				arrangers_string = "<a href='../singer/%s'>%s</a><br />%s" % (arranger.id,arranger.name,arrangers_string)
 		else:
 			arrangers_string = rep.song.arranger_text
 
 		soloist_string = ""
 		if(rep.soloist_text == ""):
 			soloists = rep.soloist.all()
-			soloist_count = 0;
 			for soloist in soloists:
-				if(soloist_count > 0):
-					soloist_string = "%s<br />" % soloist_string
-				soloist_count = soloist_count +1
-				soloist_string = "<a href='../singer/%s'>%s</a> %s" % (soloist.id,soloist.name,soloist_string)
+				soloist_string = "<a href='../singer/%s'>%s</a><br />%s" % (soloist.id,soloist.name,soloist_string)
 		else:
 			soloist_string = rep.soloist_text
 
@@ -374,7 +359,7 @@ def singer(Request,id):
 	if singer.senior_solo is None:
 		senior_solo  = "";
 	else:
-		senior_solo  = "<h3 style='margin-bottom:0px;padding-bottom:0px;text-align:center;'>Senior Solo:</h3><p style='text-align:center'>%s by %s</p>" % (singer.senior_solo.name,singer.senior_solo.artist)
+		senior_solo  = "<h3 style='margin-bottom:0px;padding-bottom:0px;text-align:center;'>Senior Solo:</h3><p style='text-align:center'>%s<br />(%s)</p>" % (singer.senior_solo.name,singer.senior_solo.artist)
 
 	sidebar_string = "%s%s"  % (sidebar_string,senior_solo)
 
