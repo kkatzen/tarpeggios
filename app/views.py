@@ -415,11 +415,17 @@ def gallery(Request):
 
 def events(Request):
 	today = datetime.now().date()
-	semester = Semester.objects.all().order_by('-date').filter(date__lte=today)[:1]
+	semester = Semester.objects.all().order_by('-date').filter(date__lte=today)[:2]
 
-	events = Event.objects.filter(semester=semester[0]).order_by('date');
 
-	#events count 0
+	events1 = Event.objects.filter(semester=semester[0]).order_by('date');
+	events2 = Event.objects.filter(semester=semester[1]).order_by('date');
+	events = []
+	for event in events1:
+		events.append(event);
+	for event in events2:
+		events.append(event);
+
 	text = "<div style='clear:both;width:600px'>"
 	for event in events:
 		if event.link == "":
