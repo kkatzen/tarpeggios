@@ -292,7 +292,7 @@ def members(Request):
 
 	text = "%s<p style='clear:both;'><a href='alumni'>View Tarpeggio Alumni</a></p>" % text
 
-	return render_to_response('app/index.html', {'text': text})
+	return render_to_response('app/index.html', {'text': text,'maxwidth':"width: 90%;"})
 
 def alumni(Request):
 	#order these peeps by most recent grad semester than by name
@@ -321,7 +321,7 @@ def alumni(Request):
 		singer_info = "%s<br />%s<br />%s<br />" % (singer.name,grad,singer.voice_part)
 		text = "%s<div id ='member_sem'><a href='singer/%s'><img src='%s'><div id='memberinfo_sem'>%s</div></a></div>" % (text,singer.id,image_url,singer_info)
 
-	return render_to_response('app/index.html', {'text': text})
+	return render_to_response('app/index.html', {'text': text,'maxwidth':"width: 90%;"})
 
 def singer(Request,id):
 	singer = get_object_or_404(Singer, id=id)
