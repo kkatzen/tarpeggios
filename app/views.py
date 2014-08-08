@@ -415,7 +415,7 @@ def gallery(Request):
 
 def events(Request):
 	today = datetime.now().date()
-	semester = Semester.objects.all().order_by('-date').filter(date__lte=today)[:2]
+	semester = Semester.objects.all().order_by('+date').filter(date__lte=today)[:2]
 
 
 	events1 = Event.objects.filter(semester=semester[0]).order_by('date');
