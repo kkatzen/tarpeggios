@@ -415,11 +415,11 @@ def gallery(Request):
 
 def events(Request):
 	today = datetime.now().date()
-	semester = Semester.objects.all().order_by('date').filter(date__lte=today)[:2]
+	semester = Semester.objects.all().order_by('-date').filter(date__lte=today)[:2]
 
 
-	events1 = Event.objects.filter(semester=semester[0]).order_by('date');
-	events2 = Event.objects.filter(semester=semester[1]).order_by('date');
+	events1 = Event.objects.filter(semester=semester[0]).order_by('-date');
+	events2 = Event.objects.filter(semester=semester[1]).order_by('-date');
 	events = []
 	for event in events1:
 		events.append(event);
