@@ -388,7 +388,7 @@ def singer(Request,id):
 			count = count+1
 		singer_string = "%s</p>"  % (singer_string)
 
-	return render_to_response('app/index.html', {'text': singer_string,'sidebar':sidebar_string,'maxwidth':"maxwidth: 1000px;"})
+	return render_to_response('app/index.html', {'text': singer_string,'sidebar':sidebar_string,'maxwidth':"max-width: 1000px;"})
 
 
 def index(Request):
@@ -400,7 +400,7 @@ def index(Request):
 	for sidebar in sidebars:
 		sidebar_string = "%s<h3>%s</h3><p>%s</p>" % (sidebar_string,sidebar.name,sidebar.content)
 
-	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string,'maxwidth':"maxwidth: 1000px;"})
+	return render_to_response('app/index.html', {'text': page.content,'sidebar':sidebar_string,'maxwidth':"max-width: 1000px;"})
 
 def gallery(Request):
 	page = get_object_or_404(Page, name="gallery")
@@ -444,4 +444,4 @@ def events(Request):
 	for sidebar in sidebars:
 		sidebar_string = "%s<h3>%s</h3><p>%s</p>" % (sidebar_string,sidebar.name,sidebar.content)
 
-	return render_to_response('app/index.html', {'text': text,'sidebar':sidebar_string,'maxwidth':"maxwidth: 1000px;"})
+	return render_to_response('app/index.html', {'text': text,'sidebar':sidebar_string,'maxwidth':"max-width: 1000px;"})
